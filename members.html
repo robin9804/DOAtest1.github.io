@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Members - DOA Lab</title>
+    <meta name="description" content="DOA Lab Members and Alumni">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            line-height: 1.6;
+            color: #1d1d1f;
+            background-color: #fff;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            padding: 0 20px;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 60px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1d1d1f;
+            text-decoration: none;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 40px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #1d1d1f;
+            font-weight: 400;
+            font-size: 17px;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: #007aff;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 50%;
+            background-color: #007aff;
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 100%;
+        }
+
+        /* Page Header */
+        .page-header {
+            padding: 140px 20px 80px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+        }
+
+        .page-header h1 {
+            font-size: clamp(3rem, 6vw, 4rem);
+            font-weight: 700;
+            margin-bottom: 20px;
+            letter-spacing: -1px;
+        }
+
+        .page-header p {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Sections */
+        .section {
+            padding: 100px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 60px;
+            color: #1d1d1f;
+            letter-spacing: -1px;
+        }
+
+        /* Professor Section */
+        .professor-section {
+            background: #f5f5f7;
+        }
+
+        .professor-card {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 24px;
+            padding: 60px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .professor-image {
+            width: 200px;
+            height: 250px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: white;
+        }
+
+        .professor-info h3 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #1d1d1f;
+        }
+
+        .professor-info .title {
+            font-size: 1.3rem;
+            color: #007aff;
+            font-weight: 600;
+            margin-bottom: 30px;
+        }
+
+        .professor-info .contact {
+            margin-bottom: 30px;
+        }
+
+        .professor-info .contact p {
+            margin-bottom: 8px;
+            color: #6e6e73;
+        }
+
+        .professor-info .contact a {
+            color: #007aff;
+            text-decoration: none;
+        }
+
+        .professor-info .contact a:hover {
+            text-decoration: underline;
+        }
+
+        .professor-info .education {
+            margin-bottom: 30px;
+        }
+
+        .professor-info .education h4 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #1d1d1f;
+        }
+
+        .professor-info .education ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .professor-info .education li {
+            padding: 5px 0;
+            color: #6e6e73;
+            position: relative;
+            padding-left: 15px;
+        }
+
+        .professor-info .education li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: #007aff;
+        }
+
+        /* Members Grid */
+        .members-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+
+        .member-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px 30px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .member-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.12);
+        }
+
+        .member-avatar {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, #007aff 0%, #667eea 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            font-size: 2.5rem;
+            color: white;
+        }
+
+        .member-card h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #1d1d1f;
+        }
+
+        .member-position {
+            color: #007aff;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .member-research {
+            color: #6e6e73;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        .member-contact {
+            font-size: 0.9rem;
+        }
+
+        .member-contact a {
+            color: #007aff;
+            text-decoration: none;
+        }
+
+        .member-contact a:hover {
+            text-decoration: underline;
+        }
+
+        /* Alumni Section */
+        .alumni-section {
+            background: #f5f5f7;
+        }
+
+        .alumni-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .alumni-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .alumni-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .alumni-card h4 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #1d1d1f;
+        }
+
+        .alumni-degree {
+            color: #007aff;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+
+        .alumni-current {
+            color: #6e6e73;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        /* Footer */
+        .footer {
+            background: #1d1d1f;
+            color: #86868b;
+            padding: 60px 20px 40px;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer p {
+            margin-bottom: 10px;
+        }
+
+        .footer a {
+            color: #86868b;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            color: #007aff;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .page-header {
+                padding: 120px 20px 60px;
+            }
+
+            .page-header h1 {
+                font-size: 2.5rem;
+            }
+
+            .section {
+                padding: 60px 20px;
+            }
+
+            .section h2 {
+                font-size: 2rem;
+                margin-bottom: 40px;
+            }
+
+            .professor-card {
+                grid-template-columns: 1fr;
+                text-align: center;
+                padding: 40px;
+            }
+
+            .professor-image {
+                margin: 0 auto;
+            }
+
+            .members-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .alumni-grid {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 20px;
+            }
+        }
+
+        /* Animation */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">DOA Lab</a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="research.html">Research</a></li>
+                <li><a href="members.html" class="active">Members</a></li>
+                <li><a href="publications.html">Publications</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <h1>Our Team</h1>
+        <p>Meet the talented researchers driving innovation in digital optics and augmented reality</p>
+    </section>
+
+    <!-- Professor Section -->
+    <section class="section professor-section">
+        <h2>Principal Investigator</h2>
+        <div class="professor-card fade-in">
+            <div class="professor-image">
+                👨‍🔬
+            </div>
+            <div class="professor-info">
+                <h3>김민수 교수</h3>
+                <div class="title">Prof. Min-Su Kim</div>
+                
+                <div class="contact">
+                    <p><strong>이메일:</strong> <a href="mailto:mins@khu.ac.kr">mins@khu.ac.kr</a></p>
+                    <p><strong>전화:</strong> <a href="tel:+82-02-961-0801">+82-02-961-0801</a></p>
+                    <p><strong>사무실:</strong> Space21 이과대학 701호</p>
+                </div>
+                
+                <div class="education">
+                    <h4>학력</h4>
+                    <ul>
+                        <li>2004.08 서울대학교 전기공학부 공학박사</li>
+                        <li>1997.02 서울대학교 전기공학부 공학석사</li>
+                        <li>1995.02 서울대학교 전기공학부 공학학사</li>
+                    </ul>
+                </div>
+                
+                <div class="education">
+                    <h4>경력</h4>
+                    <ul>
+                        <li>2007~현재 경희대학교 교수</li>
+                        <li>2005~2007 Virginia Tech Post doctor</li>
+                        <li>1997~1998 삼성전자 주임 연구원</li>
+                    </ul>
+                </div>
+                
+                <div class="education">
+                    <h4>연구분야</h4>
+                    <ul>
+                        <li>Digital Holography</li>
+                        <li>Augmented Reality</li>
+                        <li>3D Display Technology</li>
+                        <li>Optical Engineering</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Current Members Section -->
+    <section class="section">
+        <h2>Current Members</h2>
+        <div class="members-grid">
+            <div class="member-card fade-in">
+                <div class="member-avatar">👨‍🎓</div>
+                <h3>이준호</h3>
+                <div class="member-position">박사과정 4년차</div>
+                <div class="member-research">홀로그래픽 디스플레이 알고리즘 최적화</div>
+                <div class="member-contact">
+                    <a href="mailto:junho.lee@khu.ac.kr">junho.lee@khu.ac.kr</a>
+                </div>
+            </div>
+
+            <div class="member-card fade-in">
+                <div class="member-avatar">👩‍🎓</div>
+                <h3>박지은</h3>
+                <div class="member-position">박사과정 3년차</div>
+                <div class="member-research">AR 비전 시스템 및 실시간 추적 기술</div>
+                <div class="member-contact">
+                    <a href="mailto:jieun.park@khu.ac.kr">jieun.park@khu.ac.kr</a>
+                </div>
+            </div>
+
+            <div class="member-card fade-in">
+                <div class="member-avatar">👨‍🎓</div>
+                <h3>최상훈</h3>
+                <div class="member-position">박사과정 2년차</div>
+                <div class="member-research">3D 디스플레이 광학 시스템 설계</div>
+                <div class="member-contact">
+                    <a href="mailto:sanghoon.choi@khu.ac.kr">sanghoon.choi@khu.ac.kr</a>
+                </div>
+            </div>
+
+            <div class="member-card fade-in">
+                <div class="member-avatar">👩‍🎓</div>
+                <h3>정예린</h3>
+                <div class="member-position">석사과정 2년차</div>
+                <div class="member-research">디지털 홀로그래피 영상처리</div>
+                <div class="member-contact">
+                    <a href="mailto:yerin.jung@khu.ac.kr">yerin.jung@khu.ac.kr</a>
+                </div>
+            </div>
+
+            <div class="member-card fade-in">
+                <div class="member-avatar">👨‍🎓</div>
+                <h3>김대우</h3>
+                <div class="member-position">석사과정 2년차</div>
+                <div class="member-research">AR 인터페이스 및 UX 디자인</div>
+                <div class="member-contact">
+                    <a href="mailto:daewoo.kim@khu.ac.kr">daewoo.kim@khu.ac.kr</a>
+                </div>
+            </div>
+
+            <div class="member-card fade-in">
+                <div class="member-avatar">👩‍🎓</div>
+                <h3>윤소영</h3>
+                <div class="member-position">석사과정 1년차</div>
+                <div class="member-research">광학 시스템 모델링 및 시뮬레이션</div>
+                <div class="member-contact">
+                    <a href="mailto:soyoung.yoon@khu.ac.kr">soyoung.yoon@khu.ac.kr</a>
+                </div>
+            </div>
+
+            <div class="member-card fade-in">
+                <div class="member-avatar">👨‍🎓</div>
+                <h3>오준석</h3>
+                <div class="member-position">학부연구생</div>
+                <div class="member-research">실시간 홀로그램 렌더링</div>
+                <div class="member-contact">
+                    <a href="mailto:junseok.oh@khu.ac.kr">junseok.oh@khu.ac.kr</a>
+                </div>
+            </div>
+
+            <div class="member-card fade-in">
+                <div class="member-avatar">👩‍🎓</div>
+                <h3>한지수</h3>
+                <div class="member-position">학부연구생</div>
+                <div class="member-research">AR 애플리케이션 개발</div>
+                <div class="member-contact">
+                    <a href="mailto:jisoo.han@khu.ac.kr">jisoo.han@khu.ac.kr</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Alumni Section -->
+    <section class="section alumni-section">
+        <h2>Alumni</h2>
+        <div class="alumni-grid">
+            <div class="alumni-card fade-in">
+                <h4>김영수</h4>
+                <div class="alumni-degree">박사 (2023)</div>
+                <div class="alumni-current">삼성전자 수석연구원</div>
+            </div>
+
+            <div class="alumni-card fade-in">
+                <h4>이민지</h4>
+                <div class="alumni-degree">박사 (2022)</div>
+                <div class="alumni-current">LG디스플레이 선임연구원</div>
+            </div>
+
+            <div class="alumni-card fade-in">
+                <h4>박성훈</h4>
+                <div class="alumni-degree">석사 (2023)</div>
+                <div class="alumni-current">네이버 AR/VR 팀</div>
+            </div>
+
+            <div class="alumni-card fade-in">
+                <h4>정하은</h4>
+                <div class="alumni-degree">석사 (2022)</div>
+                <div class="alumni-current">카카오 소프트웨어 엔지니어</div>
+            </div>
+
+            <div class="alumni-card fade-in">
+                <h4>최지훈</h4>
+                <div class="alumni-degree">박사 (2021)</div>
+                <div class="alumni-current">애플 쿠퍼티노 연구원</div>
+            </div>
+
+            <div class="alumni-card fade-in">
+                <h4>오지영</h4>
+                <div class="alumni-degree">석사 (2021)</div>
+                <div class="alumni-current">구글 디지털 이니셔티브</div>
+            </div>
+
+            <div class="alumni-card fade-in">
+                <h4>서민준</h4>
+                <div class="alumni-degree">박사 (2020)</div>
+                <div class="alumni-current">마이크로소프트 홀로렌즈 팀</div>
+            </div>
+
+            <div class="alumni-card fade-in">
+                <h4>박예진</h4>
+                <div class="alumni-degree">석사 (2020)</div>
+                <div class="alumni-current">메타 리얼리티 랩스</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2024 DOA Lab, Kyung Hee University. All rights reserved.</p>
+            <p>Digital Optics and Augmented Reality Laboratory</p>
+            <p><a href="mailto:mins@khu.ac.kr">mins@khu.ac.kr</a> | <a href="tel:+82-02-961-0801">+82-02-961-0801</a></p>
+        </div>
+    </footer>
+
+    <script>
+        // Intersection Observer for fade-in animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        // Observe all fade-in elements
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.fade-in').forEach(el => {
+                observer.observe(el);
+            });
+        });
+    </script>
+</body>
+</html>

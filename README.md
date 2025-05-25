@@ -120,7 +120,7 @@ CSS 변수를 수정하여 브랜드 색상 적용:
 Digital Optics and Augmented Reality Laboratory  
 경희대학교 이과대학 Space21 701호
 
-- **교수**: 민성욱 교수
+- **교수**: 김민수 교수
 - **이메일**: mins@khu.ac.kr
 - **전화**: +82-02-961-0801
 
