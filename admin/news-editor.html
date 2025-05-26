@@ -119,8 +119,9 @@
         .news-item {
             padding: 20px;
             border-bottom: 1px solid #e5e5e7;
-            cursor: pointer;
             transition: background-color 0.3s ease;
+            display: flex;
+            align-items: center;
         }
         
         .news-item:hover {
@@ -263,7 +264,14 @@
                 
                 <button class="btn" onclick="addNews()">뉴스 추가</button>
                 <button class="btn btn-secondary" onclick="clearForm()">초기화</button>
+                <button class="btn btn-secondary" onclick="goToHomepage()">🏠 홈페이지로</button>
                 <button class="btn btn-danger" onclick="logout()">로그아웃</button>
+                
+                <!-- 추가 기능 버튼들 -->
+                <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e5e7;">
+                    <button class="btn btn-secondary" onclick="exportNews()">💾 뉴스 내보내기</button>
+                    <button class="btn btn-danger" onclick="clearAllNews()">🗑️ 모든 뉴스 삭제</button>
+                </div>
                 
                 <div id="operation-message"></div>
             </div>
@@ -358,14 +366,28 @@
         // 뉴스 목록 로드
         async function loadNewsList() {
             try {
-                const response = await fetch(CONFIG.NEWS_CSV_URL);
-                const csvText = await response.text();
-                currentNews = parseCSV(csvText);
+                // 먼저 로컬 저장소에서 확인
+                let storedData = getStoredNews();
                 
-                renderNewsList();
+                if (storedData && storedData.length > 0) {
+                    currentNews = storedData;
+                    renderNewsList();
+                    showMessage('로컬 저장소에서 뉴스를 불러왔습니다.', 'success');
+                } else {
+                    // 로컬 데이터가 없으면 Google Sheets에서 로드
+                    const response = await fetch(CONFIG.NEWS_CSV_URL);
+                    const csvText = await response.text();
+                    currentNews = parseCSV(csvText);
+                    renderNewsList();
+                    showMessage('Google Sheets에서 뉴스를 불러왔습니다.', 'success');
+                }
             } catch (error) {
                 console.error('뉴스 로드 실패:', error);
                 showMessage('뉴스 목록을 불러올 수 없습니다.', 'error');
+                
+                // 기본 샘플 데이터 로드
+                currentNews = getSampleData();
+                renderNewsList();
             }
         }
 
@@ -429,10 +451,16 @@
             }
 
             newsListContainer.innerHTML = currentNews.map((news, index) => `
-                <div class="news-item" onclick="editNews(${index})">
-                    <div class="news-date">${news.date}</div>
-                    <div class="news-title">${news.title}</div>
-                    <div class="news-content">${news.content.substring(0, 100)}${news.content.length > 100 ? '...' : ''}</div>
+                <div class="news-item">
+                    <div onclick="editNews(${index})" style="cursor: pointer; flex: 1;">
+                        <div class="news-date">${news.date}</div>
+                        <div class="news-title">${news.title}</div>
+                        <div class="news-content">${news.content.substring(0, 100)}${news.content.length > 100 ? '...' : ''}</div>
+                    </div>
+                    <div style="margin-left: 15px; display: flex; flex-direction: column; gap: 5px;">
+                        <button class="btn btn-secondary" style="padding: 5px 10px; font-size: 12px; margin: 0;" onclick="editNews(${index})">편집</button>
+                        <button class="btn btn-danger" style="padding: 5px 10px; font-size: 12px; margin: 0;" onclick="deleteNews(${index})">삭제</button>
+                    </div>
                 </div>
             `).join('');
         }
@@ -458,24 +486,57 @@
                 return;
             }
 
-            // 실제 구현에서는 Google Sheets API를 사용하여 데이터를 추가
-            // 현재는 시뮬레이션만 수행
-            
-            showMessage('현재 데모 버전입니다. 실제 구현을 위해서는 Google Sheets API 설정이 필요합니다.', 'error');
-            
-            // 임시로 로컬 배열에 추가하여 미리보기
-            const newNewsItem = {
+            // 로컬 저장소에 저장 (실제 기능)
+            const newsItem = {
                 date: date,
                 title: title,
                 content: content,
                 image: image
             };
             
-            currentNews.unshift(newNewsItem);
+            // 기존 데이터 가져오기
+            let storedData = getStoredNews();
+            storedData.unshift(newsItem); // 맨 앞에 추가
+            
+            // 로컬 저장소에 저장
+            saveToStorage(storedData);
+            
+            // 현재 뉴스 배열에도 추가
+            currentNews.unshift(newsItem);
             renderNewsList();
             clearForm();
             
-            showMessage('뉴스가 임시로 추가되었습니다. (실제 저장되지 않음)', 'success');
+            showMessage('새 뉴스가 성공적으로 추가되었습니다!', 'success');
+        }
+        
+        // 저장된 뉴스 가져오기
+        function getStoredNews() {
+            try {
+                const stored = localStorage.getItem('doalab_news');
+                if (stored) {
+                    const data = JSON.parse(stored);
+                    return data.news || [];
+                }
+            } catch (error) {
+                console.error('저장된 뉴스 로드 실패:', error);
+            }
+            return [];
+        }
+        
+        // 로컬 저장소에 저장
+        function saveToStorage(newsArray) {
+            try {
+                const dataToSave = {
+                    lastUpdated: new Date().toISOString(),
+                    count: newsArray.length,
+                    news: newsArray
+                };
+                localStorage.setItem('doalab_news', JSON.stringify(dataToSave));
+                console.log('뉴스 데이터 저장 완료:', dataToSave.count + '개 뉴스');
+            } catch (error) {
+                console.error('저장 실패:', error);
+                showMessage('데이터 저장에 실패했습니다.', 'error');
+            }
         }
 
         // 폼 초기화
@@ -518,6 +579,105 @@
                 }
             });
         });
+        
+        // 추가 기능들
+        
+        // 모든 뉴스 삭제
+        function clearAllNews() {
+            const confirmation = prompt(
+                '모든 뉴스 데이터를 삭제하려면 "DELETE ALL"을 입력하세요.\n\n주의: 이 작업은 되돌릴 수 없습니다!',
+                ''
+            );
+            
+            if (confirmation === 'DELETE ALL') {
+                localStorage.removeItem('doalab_news');
+                localStorage.removeItem('doalab_news_draft');
+                localStorage.removeItem('doalab_settings');
+                
+                currentNews = [];
+                renderNewsList();
+                clearForm();
+                
+                showMessage('✅ 모든 뉴스 데이터가 삭제되었습니다.', 'success');
+            } else if (confirmation !== null) {
+                showMessage('❌ 삭제가 취소되었습니다.', 'error');
+            }
+        }
+        
+        // 뉴스 내보내기
+        function exportNews() {
+            try {
+                const exportData = {
+                    exportDate: new Date().toISOString(),
+                    totalNews: currentNews.length,
+                    data: currentNews
+                };
+                
+                const dataStr = JSON.stringify(exportData, null, 2);
+                const dataBlob = new Blob([dataStr], {type: 'application/json'});
+                
+                const url = URL.createObjectURL(dataBlob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `doalab_news_export_${new Date().toISOString().split('T')[0]}.json`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                
+                showMessage(`📥 뉴스 데이터 내보내기 완료! (총 ${currentNews.length}개)`, 'success');
+                
+            } catch (error) {
+                showMessage('내보내기에 실패했습니다.', 'error');
+            }
+        }
+        
+        // 홈페이지로 돌아가기
+        function goToHomepage() {
+            if (confirm('메인 홈페이지로 돌아가시겠습니까?')) {
+                window.location.href = '../index.html';
+            }
+        }
+        
+        // 개별 뉴스 삭제
+        function deleteNews(index) {
+            if (confirm('이 뉴스를 삭제하시겠습니까?')) {
+                // 배열에서 제거
+                currentNews.splice(index, 1);
+                
+                // 로컬 저장소에 업데이트
+                saveToStorage(currentNews);
+                
+                // UI 업데이트
+                renderNewsList();
+                
+                showMessage('뉴스가 삭제되었습니다.', 'success');
+            }
+        }
+        
+        // 샘플 데이터
+        function getSampleData() {
+            return [
+                {
+                    date: "2024.05",
+                    title: "홀로그래픽 디스플레이 시스템 개발 완료",
+                    content: "차세대 홀로그래픽 디스플레이를 위한 새로운 알고리즘 개발 및 프로토타입 제작을 성공적으로 완료했습니다.",
+                    image: ""
+                },
+                {
+                    date: "2024.03",
+                    title: "IEEE Transactions 논문 게재",
+                    content: "Augmented Reality 분야의 혁신적인 연구 결과가 IEEE Transactions에 게재되었습니다.",
+                    image: ""
+                },
+                {
+                    date: "2024.01",
+                    title: "SIGGRAPH Asia 2023 발표",
+                    content: "시드니에서 개최된 SIGGRAPH Asia에서 3D 디스플레이 기술을 발표했습니다.",
+                    image: ""
+                }
+            ];
+        }
 
         // Google Sheets API 관련 함수들 (실제 구현 시 사용)
         /*

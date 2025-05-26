@@ -212,7 +212,21 @@
         // Load news data
         async function loadNewsData() {
             try {
-                console.log('Loading news data from Google Sheets...');
+                console.log('Loading news data...');
+                
+                // 먼저 로컬 저장소에서 확인
+                const localData = getLocalNewsData();
+                if (localData && localData.length > 0) {
+                    console.log('로컬 저장소에서 뉴스 데이터 로드:', localData.length + '개');
+                    return localData.sort((a, b) => {
+                        const dateA = parseDate(a.date);
+                        const dateB = parseDate(b.date);
+                        return dateB - dateA;
+                    }).slice(0, 10);
+                }
+                
+                // 로컬 데이터가 없으면 Google Sheets에서 로드
+                console.log('로컬 데이터가 없어 Google Sheets에서 로드 시도...');
                 const response = await fetch(CONFIG.NEWS_CSV_URL);
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
@@ -237,6 +251,20 @@
                 console.error('Error loading news:', error);
                 return getSampleData();
             }
+        }
+        
+        // 로컬 저장소에서 뉴스 데이터 가져오기
+        function getLocalNewsData() {
+            try {
+                const stored = localStorage.getItem('doalab_news');
+                if (stored) {
+                    const data = JSON.parse(stored);
+                    return data.news || [];
+                }
+            } catch (error) {
+                console.error('로컬 저장소 데이터 로드 실패:', error);
+            }
+            return null;
         }
 
         // Update publications count
