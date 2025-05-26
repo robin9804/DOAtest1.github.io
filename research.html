@@ -4,431 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Research - DOA Lab</title>
-    <meta name="description" content="DOA Lab Research Areas - Digital Holography, Augmented Reality, 3D Display">
-    
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
-            line-height: 1.6;
-            color: #1d1d1f;
-            background-color: #fff;
-            overflow-x: hidden;
-        }
-
-        /* Navigation */
-        .navbar {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-            z-index: 1000;
-            padding: 0 20px;
-        }
-
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            height: 60px;
-        }
-
-        .logo {
-            font-size: 24px;
-            font-weight: 700;
-            color: #1d1d1f;
-            text-decoration: none;
-            letter-spacing: -0.5px;
-        }
-
-        .nav-links {
-            display: flex;
-            list-style: none;
-            gap: 40px;
-        }
-
-        .nav-links a {
-            text-decoration: none;
-            color: #1d1d1f;
-            font-weight: 400;
-            font-size: 17px;
-            transition: color 0.3s ease;
-            position: relative;
-        }
-
-        .nav-links a:hover,
-        .nav-links a.active {
-            color: #007aff;
-        }
-
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            bottom: -5px;
-            left: 50%;
-            background-color: #007aff;
-            transition: all 0.3s ease;
-            transform: translateX(-50%);
-        }
-
-        .nav-links a:hover::after,
-        .nav-links a.active::after {
-            width: 100%;
-        }
-
-        /* Page Header */
-        .page-header {
-            padding: 140px 20px 80px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            text-align: center;
-        }
-
-        .page-header h1 {
-            font-size: clamp(3rem, 6vw, 4rem);
-            font-weight: 700;
-            margin-bottom: 20px;
-            letter-spacing: -1px;
-        }
-
-        .page-header p {
-            font-size: 1.3rem;
-            opacity: 0.9;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        /* Sections */
-        .section {
-            padding: 100px 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .section h2 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            text-align: center;
-            margin-bottom: 60px;
-            color: #1d1d1f;
-            letter-spacing: -1px;
-        }
-
-        /* Research Areas */
-        .research-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 50px;
-            margin-bottom: 100px;
-        }
-
-        .research-card {
-            background: white;
-            border-radius: 24px;
-            padding: 50px 40px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
-            transition: all 0.4s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .research-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, rgba(103, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .research-card:hover::before {
-            opacity: 1;
-        }
-
-        .research-card:hover {
-            transform: translateY(-20px);
-            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.15);
-        }
-
-        .research-icon {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, #007aff 0%, #667eea 100%);
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 30px;
-            font-size: 2rem;
-            color: white;
-        }
-
-        .research-card h3 {
-            font-size: 2rem;
-            font-weight: 600;
-            margin-bottom: 25px;
-            color: #1d1d1f;
-            position: relative;
-            z-index: 2;
-        }
-
-        .research-card p {
-            color: #6e6e73;
-            font-size: 1.1rem;
-            line-height: 1.7;
-            margin-bottom: 25px;
-            position: relative;
-            z-index: 2;
-        }
-
-        .research-details {
-            position: relative;
-            z-index: 2;
-        }
-
-        .research-details h4 {
-            font-size: 1.2rem;
-            font-weight: 600;
-            margin-bottom: 15px;
-            color: #1d1d1f;
-        }
-
-        .research-details ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .research-details li {
-            padding: 8px 0;
-            color: #6e6e73;
-            position: relative;
-            padding-left: 20px;
-        }
-
-        .research-details li::before {
-            content: '▶';
-            position: absolute;
-            left: 0;
-            color: #007aff;
-            font-size: 0.8rem;
-        }
-
-        /* Projects Section */
-        .projects-section {
-            background: #f5f5f7;
-        }
-
-        .projects-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: 40px;
-        }
-
-        .project-card {
-            background: white;
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
-            transition: all 0.3s ease;
-        }
-
-        .project-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.12);
-        }
-
-        .project-status {
-            display: inline-block;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-bottom: 20px;
-        }
-
-        .status-ongoing {
-            background: #e3f2fd;
-            color: #1976d2;
-        }
-
-        .status-completed {
-            background: #e8f5e8;
-            color: #2e7d32;
-        }
-
-        .project-card h3 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 15px;
-            color: #1d1d1f;
-            line-height: 1.4;
-        }
-
-        .project-card p {
-            color: #6e6e73;
-            line-height: 1.6;
-            margin-bottom: 20px;
-        }
-
-        .project-meta {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 1px solid #e5e5e7;
-            font-size: 0.9rem;
-            color: #86868b;
-        }
-
-        .project-funding {
-            font-weight: 600;
-            color: #007aff;
-        }
-
-        /* Equipment Section */
-        .equipment-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            margin-top: 60px;
-        }
-
-        .equipment-item {
-            background: white;
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
-            text-align: center;
-            transition: all 0.3s ease;
-        }
-
-        .equipment-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
-        }
-
-        .equipment-item h4 {
-            font-size: 1.2rem;
-            font-weight: 600;
-            margin-bottom: 10px;
-            color: #1d1d1f;
-        }
-
-        .equipment-item p {
-            color: #6e6e73;
-            font-size: 0.95rem;
-        }
-
-        /* Footer */
-        .footer {
-            background: #1d1d1f;
-            color: #86868b;
-            padding: 60px 20px 40px;
-            text-align: center;
-        }
-
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .footer p {
-            margin-bottom: 10px;
-        }
-
-        .footer a {
-            color: #86868b;
-            text-decoration: none;
-        }
-
-        .footer a:hover {
-            color: #007aff;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-            }
-
-            .page-header {
-                padding: 120px 20px 60px;
-            }
-
-            .page-header h1 {
-                font-size: 2.5rem;
-            }
-
-            .section {
-                padding: 60px 20px;
-            }
-
-            .section h2 {
-                font-size: 2rem;
-                margin-bottom: 40px;
-            }
-
-            .research-grid {
-                grid-template-columns: 1fr;
-                gap: 30px;
-            }
-
-            .research-card {
-                padding: 40px 30px;
-            }
-
-            .projects-grid {
-                grid-template-columns: 1fr;
-                gap: 30px;
-            }
-
-            .equipment-grid {
-                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-                gap: 20px;
-            }
-
-            .project-meta {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 10px;
-            }
-        }
-
-        /* Animation */
-        .fade-in {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.6s ease;
-        }
-
-        .fade-in.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif; color: #1d1d1f; }
+        .navbar { position: fixed; top: 0; width: 100%; background: rgba(255,255,255,0.95); backdrop-filter: blur(20px); z-index: 1000; padding: 0 20px; border-bottom: 1px solid rgba(0,0,0,0.1); }
+        .nav-container { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; height: 60px; }
+        .logo { font-size: 24px; font-weight: 700; color: #1d1d1f; text-decoration: none; }
+        .nav-links { display: flex; list-style: none; gap: 40px; }
+        .nav-links a { text-decoration: none; color: #1d1d1f; font-weight: 400; font-size: 17px; }
+        .nav-links a.active, .nav-links a:hover { color: #007aff; }
+        .page-header { padding: 140px 20px 80px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; text-align: center; }
+        .page-header h1 { font-size: 4rem; font-weight: 700; margin-bottom: 20px; }
+        .section { padding: 100px 20px; max-width: 1200px; margin: 0 auto; }
+        .section h2 { font-size: 2.5rem; font-weight: 700; text-align: center; margin-bottom: 60px; color: #1d1d1f; }
+        .research-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 50px; }
+        .research-card { background: white; border-radius: 24px; padding: 50px 40px; box-shadow: 0 20px 60px rgba(0,0,0,0.1); text-align: center; }
+        .research-card h3 { font-size: 2rem; font-weight: 600; margin-bottom: 25px; color: #1d1d1f; }
+        .research-card p { color: #6e6e73; font-size: 1.1rem; line-height: 1.7; }
+        .footer { background: #1d1d1f; color: #86868b; padding: 60px 20px 40px; text-align: center; }
+        .footer a { color: #86868b; text-decoration: none; }
     </style>
 </head>
 <body>
-    <!-- Navigation -->
     <nav class="navbar">
         <div class="nav-container">
             <a href="index.html" class="logo">DOA Lab</a>
@@ -442,173 +39,34 @@
         </div>
     </nav>
 
-    <!-- Page Header -->
     <section class="page-header">
         <h1>Research Areas</h1>
-        <p>Exploring the frontiers of digital optics and augmented reality technologies</p>
+        <p>Exploring the frontiers of digital optics and augmented reality</p>
     </section>
 
-    <!-- Research Areas Section -->
     <section class="section">
         <h2>Our Research Focus</h2>
         <div class="research-grid">
-            <div class="research-card fade-in">
-                <div class="research-icon">🔬</div>
+            <div class="research-card">
                 <h3>Digital Holography</h3>
                 <p>Advanced holographic imaging techniques for next-generation display systems and optical processing applications. We develop innovative algorithms for real-time hologram generation and reconstruction.</p>
-                <div class="research-details">
-                    <h4>Key Areas:</h4>
-                    <ul>
-                        <li>Real-time hologram generation algorithms</li>
-                        <li>Computer-generated holography</li>
-                        <li>Holographic optical elements</li>
-                        <li>Phase retrieval techniques</li>
-                        <li>Digital holographic microscopy</li>
-                    </ul>
-                </div>
             </div>
-
-            <div class="research-card fade-in">
-                <div class="research-icon">👓</div>
+            <div class="research-card">
                 <h3>Augmented Reality</h3>
                 <p>Cutting-edge AR technologies that seamlessly blend digital content with the real world for immersive experiences. Our research focuses on optical see-through displays and spatial tracking systems.</p>
-                <div class="research-details">
-                    <h4>Key Areas:</h4>
-                    <ul>
-                        <li>Optical see-through displays</li>
-                        <li>Spatial tracking and registration</li>
-                        <li>AR visualization algorithms</li>
-                        <li>Mixed reality interfaces</li>
-                        <li>Real-time rendering optimization</li>
-                    </ul>
-                </div>
             </div>
-
-            <div class="research-card fade-in">
-                <div class="research-icon">📺</div>
+            <div class="research-card">
                 <h3>3D Display Technology</h3>
                 <p>Revolutionary 3D display technologies that provide natural depth perception without special glasses or headsets. We explore light field displays and volumetric imaging systems.</p>
-                <div class="research-details">
-                    <h4>Key Areas:</h4>
-                    <ul>
-                        <li>Autostereoscopic displays</li>
-                        <li>Light field display systems</li>
-                        <li>Volumetric imaging</li>
-                        <li>Integral imaging</li>
-                        <li>Multi-view display optimization</li>
-                    </ul>
-                </div>
             </div>
         </div>
     </section>
 
-    <!-- Current Projects Section -->
-    <section class="section projects-section">
-        <h2>Current Research Projects</h2>
-        <div class="projects-grid">
-            <div class="project-card fade-in">
-                <span class="project-status status-ongoing">진행중</span>
-                <h3>차세대 홀로그래픽 디스플레이 기술 개발</h3>
-                <p>고해상도 실시간 홀로그램 생성 및 재생을 위한 새로운 알고리즘 개발과 하드웨어 최적화 연구를 진행하고 있습니다.</p>
-                <div class="project-meta">
-                    <span>2023.03 - 2026.02</span>
-                    <span class="project-funding">과학기술정보통신부</span>
-                </div>
-            </div>
-
-            <div class="project-card fade-in">
-                <span class="project-status status-ongoing">진행중</span>
-                <h3>AR 기반 의료 시뮬레이션 시스템</h3>
-                <p>의료진 교육을 위한 증강현실 기반 수술 시뮬레이션 시스템 개발 및 실용화 연구를 수행하고 있습니다.</p>
-                <div class="project-meta">
-                    <span>2024.01 - 2025.12</span>
-                    <span class="project-funding">산업통상자원부</span>
-                </div>
-            </div>
-
-            <div class="project-card fade-in">
-                <span class="project-status status-completed">완료</span>
-                <h3>광학 시스루 AR 디스플레이 개발</h3>
-                <p>경량화된 광학 시스루 증강현실 디스플레이의 설계 및 제작에 관한 연구를 성공적으로 완료했습니다.</p>
-                <div class="project-meta">
-                    <span>2022.03 - 2023.12</span>
-                    <span class="project-funding">한국연구재단</span>
-                </div>
-            </div>
-
-            <div class="project-card fade-in">
-                <span class="project-status status-ongoing">진행중</span>
-                <h3>다시점 3D 디스플레이 최적화</h3>
-                <p>안경 없는 3D 디스플레이의 시야각 확장 및 해상도 향상을 위한 광학 시스템 연구를 진행하고 있습니다.</p>
-                <div class="project-meta">
-                    <span>2023.09 - 2025.08</span>
-                    <span class="project-funding">삼성전자</span>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Equipment Section -->
-    <section class="section">
-        <h2>Research Equipment & Facilities</h2>
-        <div class="equipment-grid">
-            <div class="equipment-item fade-in">
-                <h4>레이저 간섭계</h4>
-                <p>고정밀 홀로그램 기록 및 광학 측정용</p>
-            </div>
-            <div class="equipment-item fade-in">
-                <h4>공간광변조기 (SLM)</h4>
-                <p>실시간 홀로그램 디스플레이 및 위상 제어용</p>
-            </div>
-            <div class="equipment-item fade-in">
-                <h4>고속 카메라</h4>
-                <p>동적 홀로그램 분석 및 실시간 추적용</p>
-            </div>
-            <div class="equipment-item fade-in">
-                <h4>광학 벤치</h4>
-                <p>정밀 광학 실험 및 시스템 구성용</p>
-            </div>
-            <div class="equipment-item fade-in">
-                <h4>AR/VR 헤드셋</h4>
-                <p>증강현실 애플리케이션 개발 및 테스트용</p>
-            </div>
-            <div class="equipment-item fade-in">
-                <h4>GPU 클러스터</h4>
-                <p>대용량 홀로그램 연산 및 실시간 처리용</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
     <footer class="footer">
         <div class="footer-content">
             <p>&copy; 2024 DOA Lab, Kyung Hee University. All rights reserved.</p>
-            <p>Digital Optics and Augmented Reality Laboratory</p>
-            <p><a href="mailto:mins@khu.ac.kr">mins@khu.ac.kr</a> | <a href="tel:+82-02-961-0801">+82-02-961-0801</a></p>
+            <p><a href="mailto:mins@khu.ac.kr">mins@khu.ac.kr</a></p>
         </div>
     </footer>
-
-    <script>
-        // Intersection Observer for fade-in animations
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-
-        const observer = new IntersectionObserver(function(entries) {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
-            });
-        }, observerOptions);
-
-        // Observe all fade-in elements
-        document.addEventListener('DOMContentLoaded', function() {
-            document.querySelectorAll('.fade-in').forEach(el => {
-                observer.observe(el);
-            });
-        });
-    </script>
 </body>
 </html>

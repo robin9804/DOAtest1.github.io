@@ -12,20 +12,23 @@
         .logo { font-size: 24px; font-weight: 700; color: #1d1d1f; text-decoration: none; }
         .nav-links { display: flex; list-style: none; gap: 40px; }
         .nav-links a { text-decoration: none; color: #1d1d1f; font-weight: 400; font-size: 17px; }
-        .nav-links a.active { color: #007aff; }
+        .nav-links a.active, .nav-links a:hover { color: #007aff; }
         .page-header { padding: 140px 20px 80px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; text-align: center; }
         .page-header h1 { font-size: 4rem; font-weight: 700; margin-bottom: 20px; }
         .section { padding: 100px 20px; max-width: 1200px; margin: 0 auto; }
+        .section h2 { font-size: 2.5rem; font-weight: 700; text-align: center; margin-bottom: 60px; color: #1d1d1f; }
         .contact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 50px; }
         .contact-card { background: white; border-radius: 24px; padding: 50px 40px; box-shadow: 0 20px 60px rgba(0,0,0,0.1); text-align: center; }
-        .contact-icon { width: 80px; height: 80px; background: linear-gradient(135deg, #007aff 0%, #667eea 100%); border-radius: 20px; display: flex; align-items: center; justify-content: center; margin: 0 auto 30px; font-size: 2rem; color: white; }
         .contact-card h3 { font-size: 1.8rem; font-weight: 600; margin-bottom: 25px; color: #1d1d1f; }
         .contact-info { color: #6e6e73; font-size: 1.1rem; line-height: 1.7; }
         .contact-info p { margin-bottom: 15px; }
         .contact-info a { color: #007aff; text-decoration: none; font-weight: 600; }
         .hiring-section { background: #f5f5f7; text-align: center; }
         .hiring-card { max-width: 800px; margin: 0 auto; background: white; border-radius: 24px; padding: 60px 50px; box-shadow: 0 20px 60px rgba(0,0,0,0.1); }
+        .hiring-card h3 { font-size: 2.5rem; font-weight: 700; margin-bottom: 30px; color: #1d1d1f; }
+        .hiring-card p { font-size: 1.2rem; color: #6e6e73; line-height: 1.7; margin-bottom: 40px; }
         .footer { background: #1d1d1f; color: #86868b; padding: 60px 20px 40px; text-align: center; }
+        .footer a { color: #86868b; text-decoration: none; }
     </style>
 </head>
 <body>
@@ -51,10 +54,10 @@
         <h2>Contact Information</h2>
         <div class="contact-grid">
             <div class="contact-card">
-                <div class="contact-icon">👨‍🏫</div>
                 <h3>Principal Investigator</h3>
                 <div class="contact-info">
                     <p><strong>Prof. Min-Su Kim</strong></p>
+                    <p>Digital Optics & AR Expert</p>
                     <p><a href="mailto:mins@khu.ac.kr">mins@khu.ac.kr</a></p>
                     <p><a href="tel:+82-02-961-0801">+82-02-961-0801</a></p>
                     <p>Office: Space21 Room 701</p>
@@ -62,7 +65,6 @@
             </div>
 
             <div class="contact-card">
-                <div class="contact-icon">📍</div>
                 <h3>Laboratory Location</h3>
                 <div class="contact-info">
                     <p><strong>DOA Lab</strong></p>
@@ -73,7 +75,6 @@
             </div>
 
             <div class="contact-card">
-                <div class="contact-icon">🏫</div>
                 <h3>University Information</h3>
                 <div class="contact-info">
                     <p><strong>Kyung Hee University</strong></p>
@@ -88,10 +89,10 @@
     <section class="section hiring-section">
         <div class="hiring-card">
             <h3>We are Hiring!</h3>
-            <p>Join our research team in digital optics and augmented reality. We welcome passionate researchers and students.</p>
-            <p style="margin-top: 40px;">
-                <strong>Interested?</strong> Send your CV to 
-                <a href="mailto:mins@khu.ac.kr" style="color: #007aff;">mins@khu.ac.kr</a>
+            <p>Join our dynamic research team and contribute to cutting-edge developments in digital optics and augmented reality. We welcome passionate researchers and students who are eager to push the boundaries of technology.</p>
+            <p style="margin-top: 40px; font-size: 1.1rem;">
+                <strong>Interested?</strong> Send your CV and research interests to 
+                <a href="mailto:mins@khu.ac.kr" style="color: #007aff; text-decoration: none; font-weight: 600;">mins@khu.ac.kr</a>
             </p>
         </div>
     </section>
@@ -99,6 +100,7 @@
     <footer class="footer">
         <div class="footer-content">
             <p>&copy; 2024 DOA Lab, Kyung Hee University. All rights reserved.</p>
+            <p>Digital Optics and Augmented Reality Laboratory</p>
             <p><a href="mailto:mins@khu.ac.kr">mins@khu.ac.kr</a> | <a href="tel:+82-02-961-0801">+82-02-961-0801</a></p>
         </div>
     </footer>
