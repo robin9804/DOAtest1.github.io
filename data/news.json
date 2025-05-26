@@ -1,0 +1,24 @@
+{
+  "lastUpdated": "2024-05-26T00:00:00Z",
+  "count": 3,
+  "news": [
+    {
+      "date": "2024.03",
+      "title": "홀로그래픽 디스플레이 시스템 개발 완료",
+      "content": "차세대 홀로그래픽 디스플레이를 위한 새로운 알고리즘 개발 및 프로토타입 제작을 성공적으로 완료했습니다.",
+      "image": ""
+    },
+    {
+      "date": "2024.01",
+      "title": "IEEE Transactions 논문 게재",
+      "content": "Augmented Reality 분야의 혁신적인 연구 결과가 IEEE Transactions에 게재되었습니다.",
+      "image": ""
+    },
+    {
+      "date": "2023.11",
+      "title": "SIGGRAPH Asia 2023 발표",
+      "content": "시드니에서 개최된 SIGGRAPH Asia에서 3D 디스플레이 기술을 발표했습니다.",
+      "image": ""
+    }
+  ]
+}

@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOA Lab News Editor</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif; 
+            background: #f5f5f7; 
+            min-height: 100vh;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: -40px auto 0;
+            padding: 0 20px 60px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+        
+        .auth-section {
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .auth-section h2 {
+            margin-bottom: 30px;
+            color: #1d1d1f;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+            text-align: left;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #1d1d1f;
+            font-weight: 500;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e5e5e7;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #007aff;
+        }
+        
+        .btn {
+            background: #007aff;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px 5px;
+        }
+        
+        .btn:hover {
+            background: #0051d5;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: #8e8e93;
+        }
+        
+        .btn-secondary:hover {
+            background: #6d6d70;
+        }
+        
+        .btn-danger {
+            background: #ff3b30;
+        }
+        
+        .btn-danger:hover {
+            background: #d70015;
+        }
+        
+        .editor-section {
+            display: none;
+            padding: 40px;
+        }
+        
+        .news-list {
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid #e5e5e7;
+            border-radius: 12px;
+            margin-bottom: 30px;
+        }
+        
+        .news-item {
+            padding: 20px;
+            border-bottom: 1px solid #e5e5e7;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .news-item:hover {
+            background: #f8f9fa;
+        }
+        
+        .news-item:last-child {
+            border-bottom: none;
+        }
+        
+        .news-date {
+            color: #007aff;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .news-title {
+            color: #1d1d1f;
+            font-weight: 500;
+            margin: 5px 0;
+        }
+        
+        .news-content {
+            color: #6e6e73;
+            font-size: 14px;
+        }
+        
+        .textarea {
+            min-height: 120px;
+            resize: vertical;
+            font-family: inherit;
+        }
+        
+        .error-message {
+            background: #fff5f5;
+            color: #ff3b30;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            text-align: center;
+        }
+        
+        .success-message {
+            background: #f0fff4;
+            color: #00c851;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            text-align: center;
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+        
+        .ip-info {
+            background: #fff9e6;
+            color: #856404;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            text-align: center;
+            font-size: 14px;
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #007aff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>DOA Lab News Editor</h1>
+        <p>연구실 뉴스 관리 시스템</p>
+    </div>
+
+    <div class="container">
+        <div class="card">
+            <div class="auth-section" id="auth-section">
+                <h2>🔐 인증이 필요합니다</h2>
+                <div class="ip-info" id="ip-info">
+                    현재 IP: <span id="current-ip">확인 중...</span>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">비밀번호</label>
+                    <input type="password" id="password" class="form-input" placeholder="관리자 비밀번호를 입력하세요">
+                </div>
+                
+                <button class="btn" onclick="authenticate()">로그인</button>
+                
+                <div id="auth-error" class="error-message hidden">
+                    잘못된 비밀번호입니다.
+                </div>
+            </div>
+
+            <div class="editor-section" id="editor-section">
+                <h2>뉴스 관리</h2>
+                
+                <div id="news-list" class="news-list">
+                    <div style="text-align: center; padding: 40px; color: #6e6e73;">
+                        <div class="loading"></div>
+                        뉴스 목록을 불러오는 중...
+                    </div>
+                </div>
+                
+                <h3 style="margin-bottom: 20px;">새 뉴스 추가</h3>
+                
+                <div class="form-group">
+                    <label for="news-date">날짜</label>
+                    <input type="text" id="news-date" class="form-input" placeholder="2024.03">
+                </div>
+                
+                <div class="form-group">
+                    <label for="news-title">제목</label>
+                    <input type="text" id="news-title" class="form-input" placeholder="뉴스 제목을 입력하세요">
+                </div>
+                
+                <div class="form-group">
+                    <label for="news-content">내용</label>
+                    <textarea id="news-content" class="form-input textarea" placeholder="뉴스 내용을 입력하세요"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="news-image">이미지 URL (선택사항)</label>
+                    <input type="url" id="news-image" class="form-input" placeholder="https://example.com/image.jpg">
+                </div>
+                
+                <button class="btn" onclick="addNews()">뉴스 추가</button>
+                <button class="btn btn-secondary" onclick="clearForm()">초기화</button>
+                <button class="btn btn-danger" onclick="logout()">로그아웃</button>
+                
+                <div id="operation-message"></div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div style="padding: 30px; text-align: center; color: #6e6e73;">
+                <h3 style="margin-bottom: 15px;">📋 사용 안내</h3>
+                <p style="margin-bottom: 10px;">• 현재 Google Sheets를 통해 뉴스를 관리합니다</p>
+                <p style="margin-bottom: 10px;">• 새 뉴스 추가 후 메인 페이지 새로고침이 필요할 수 있습니다</p>
+                <p style="margin-bottom: 10px;">• 이미지는 공개 URL을 사용해주세요</p>
+                <p>• 보안을 위해 학교 네트워크에서만 접근을 권장합니다</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 설정
+        const CONFIG = {
+            ADMIN_PASSWORD: 'doalab2024!',  // 변경 가능한 비밀번호
+            ALLOWED_IPS: [
+                // 경희대 IP 대역 (예시 - 실제 IP로 변경 필요)
+                '210.107.',  // 경희대 일반적인 IP 대역
+                '127.0.0.1', // 로컬 테스트용
+                '::1'        // IPv6 로컬
+            ],
+            NEWS_CSV_URL: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRn_JB0elRDCriR7AJ5XnKE2ytUW5a6PiDjsNiLEePo0w014lgv5LNxC2tknik6j-DvqtmMO6ztuaEZ/pub?gid=0&single=true&output=csv',
+            SHEETS_API_KEY: '',  // Google Sheets API 키 (추후 설정)
+            SPREADSHEET_ID: '1vRn_JB0elRDCriR7AJ5XnKE2ytUW5a6PiDjsNiLEePo0w014lgv5LNxC2tknik6j'  // 스프레드시트 ID
+        };
+
+        let currentNews = [];
+        let isAuthenticated = false;
+
+        // IP 주소 확인
+        async function checkIP() {
+            try {
+                const response = await fetch('https://api.ipify.org?format=json');
+                const data = await response.json();
+                const ip = data.ip;
+                
+                document.getElementById('current-ip').textContent = ip;
+                
+                // IP 검증 (개발 단계에서는 비활성화)
+                const isAllowedIP = CONFIG.ALLOWED_IPS.some(allowedIP => ip.startsWith(allowedIP));
+                
+                if (!isAllowedIP && !ip.startsWith('192.168.') && !ip.startsWith('10.')) {
+                    // 실제 운영 시에는 이 부분의 주석을 해제하세요
+                    // showMessage('현재 IP에서는 접근이 제한됩니다.', 'error');
+                    // return false;
+                }
+                
+                return true;
+            } catch (error) {
+                console.error('IP 확인 실패:', error);
+                return true; // IP 확인 실패 시에도 접근 허용 (개발 단계)
+            }
+        }
+
+        // 인증
+        async function authenticate() {
+            const password = document.getElementById('password').value;
+            const authError = document.getElementById('auth-error');
+            
+            if (password !== CONFIG.ADMIN_PASSWORD) {
+                authError.classList.remove('hidden');
+                return;
+            }
+
+            const ipCheck = await checkIP();
+            if (!ipCheck) {
+                return;
+            }
+
+            authError.classList.add('hidden');
+            isAuthenticated = true;
+            
+            document.getElementById('auth-section').style.display = 'none';
+            document.getElementById('editor-section').style.display = 'block';
+            
+            await loadNewsList();
+        }
+
+        // 로그아웃
+        function logout() {
+            isAuthenticated = false;
+            document.getElementById('auth-section').style.display = 'block';
+            document.getElementById('editor-section').style.display = 'none';
+            document.getElementById('password').value = '';
+        }
+
+        // 뉴스 목록 로드
+        async function loadNewsList() {
+            try {
+                const response = await fetch(CONFIG.NEWS_CSV_URL);
+                const csvText = await response.text();
+                currentNews = parseCSV(csvText);
+                
+                renderNewsList();
+            } catch (error) {
+                console.error('뉴스 로드 실패:', error);
+                showMessage('뉴스 목록을 불러올 수 없습니다.', 'error');
+            }
+        }
+
+        // CSV 파싱
+        function parseCSV(csv) {
+            const lines = csv.split('\n').filter(line => line.trim());
+            if (lines.length < 2) return [];
+            
+            const headers = lines[0].split(',').map(header => header.trim().replace(/"/g, '').toLowerCase());
+            const data = [];
+
+            for (let i = 1; i < lines.length; i++) {
+                const values = parseCSVLine(lines[i]);
+                if (values.length >= headers.length) {
+                    const item = {};
+                    headers.forEach((header, index) => {
+                        item[header] = values[index] ? values[index].trim().replace(/"/g, '') : '';
+                    });
+                    
+                    if (item.date && (item.title || item.news || item.event)) {
+                        item.title = item.title || item.news || item.event || 'Untitled';
+                        item.content = item.content || item.description || item.details || '';
+                        data.push(item);
+                    }
+                }
+            }
+            return data;
+        }
+
+        function parseCSVLine(line) {
+            const result = [];
+            let current = '';
+            let inQuotes = false;
+            
+            for (let i = 0; i < line.length; i++) {
+                const char = line[i];
+                if (char === '"') {
+                    inQuotes = !inQuotes;
+                } else if (char === ',' && !inQuotes) {
+                    result.push(current.trim());
+                    current = '';
+                } else {
+                    current += char;
+                }
+            }
+            result.push(current.trim());
+            return result;
+        }
+
+        // 뉴스 목록 렌더링
+        function renderNewsList() {
+            const newsListContainer = document.getElementById('news-list');
+            
+            if (currentNews.length === 0) {
+                newsListContainer.innerHTML = `
+                    <div style="text-align: center; padding: 40px; color: #6e6e73;">
+                        등록된 뉴스가 없습니다.
+                    </div>
+                `;
+                return;
+            }
+
+            newsListContainer.innerHTML = currentNews.map((news, index) => `
+                <div class="news-item" onclick="editNews(${index})">
+                    <div class="news-date">${news.date}</div>
+                    <div class="news-title">${news.title}</div>
+                    <div class="news-content">${news.content.substring(0, 100)}${news.content.length > 100 ? '...' : ''}</div>
+                </div>
+            `).join('');
+        }
+
+        // 뉴스 편집
+        function editNews(index) {
+            const news = currentNews[index];
+            document.getElementById('news-date').value = news.date;
+            document.getElementById('news-title').value = news.title;
+            document.getElementById('news-content').value = news.content;
+            document.getElementById('news-image').value = news.image || '';
+        }
+
+        // 새 뉴스 추가
+        async function addNews() {
+            const date = document.getElementById('news-date').value.trim();
+            const title = document.getElementById('news-title').value.trim();
+            const content = document.getElementById('news-content').value.trim();
+            const image = document.getElementById('news-image').value.trim();
+
+            if (!date || !title || !content) {
+                showMessage('날짜, 제목, 내용은 필수 항목입니다.', 'error');
+                return;
+            }
+
+            // 실제 구현에서는 Google Sheets API를 사용하여 데이터를 추가
+            // 현재는 시뮬레이션만 수행
+            
+            showMessage('현재 데모 버전입니다. 실제 구현을 위해서는 Google Sheets API 설정이 필요합니다.', 'error');
+            
+            // 임시로 로컬 배열에 추가하여 미리보기
+            const newNewsItem = {
+                date: date,
+                title: title,
+                content: content,
+                image: image
+            };
+            
+            currentNews.unshift(newNewsItem);
+            renderNewsList();
+            clearForm();
+            
+            showMessage('뉴스가 임시로 추가되었습니다. (실제 저장되지 않음)', 'success');
+        }
+
+        // 폼 초기화
+        function clearForm() {
+            document.getElementById('news-date').value = '';
+            document.getElementById('news-title').value = '';
+            document.getElementById('news-content').value = '';
+            document.getElementById('news-image').value = '';
+        }
+
+        // 메시지 표시
+        function showMessage(message, type) {
+            const messageContainer = document.getElementById('operation-message');
+            const className = type === 'error' ? 'error-message' : 'success-message';
+            
+            messageContainer.innerHTML = `<div class="${className}">${message}</div>`;
+            
+            setTimeout(() => {
+                messageContainer.innerHTML = '';
+            }, 5000);
+        }
+
+        // 현재 날짜 자동 입력
+        function setCurrentDate() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            document.getElementById('news-date').value = `${year}.${month}`;
+        }
+
+        // 초기화
+        document.addEventListener('DOMContentLoaded', function() {
+            checkIP();
+            setCurrentDate();
+            
+            // Enter 키로 로그인
+            document.getElementById('password').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    authenticate();
+                }
+            });
+        });
+
+        // Google Sheets API 관련 함수들 (실제 구현 시 사용)
+        /*
+        async function addNewsToSheet(newsData) {
+            const url = `https://sheets.googleapis.com/v4/spreadsheets/${CONFIG.SPREADSHEET_ID}/values/Sheet1:append`;
+            
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${CONFIG.SHEETS_API_KEY}`,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    values: [[newsData.date, newsData.title, newsData.content, newsData.image]]
+                })
+            });
+            
+            return response.ok;
+        }
+        */
+    </script>
+</body>
+</html>
